@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+    <!-- 组件：抽离 -->
+    <script type="text/babel">
+      //01 纯函数 ：
+      // 输入相同的参数 返回值 应该一样
+      // 传入参数 只读取 不能被修改
+      // function sum(a, b) {
+      //   return a + b;
+      // }
+
+      // console.log(sum(2, 3));
+      // console.log(sum(2, 3));
+
+      //02  不纯函数
+      // let payload = 0;
+      // function sum2(a, b) {
+      //   // ++payload;
+      //   a = ++payload; //副作用 函数能修改自身的参数
+      //   return a + b;
+      // }
+      // console.log(sum2(2, 3));
+      // console.log(sum2(2, 3));
+      // ReactDOM.render(vDOM, document.getElementById("app"));
+
+      // component:pure funciton
+      //03  单向数据流 根组件 - 父组件 - 子组件
+
+      // 04 属性props  ...
+      function Comment(props) {
+        return (
+          <div className="Comment">
+            <User avatar={props.author.avatar} name={props.author.name} />
+            <div>{props.content}</div>
+            <div>{props.date}</div>
+          </div>
+        );
+      }
+
+      // 抽离头像： 自己约定 组件名和属性
+      function Avatar(props) {
+        return <img src={props.avatar} alt={props.avatar} />;
+      }
+
+      // 抽离用户信息: 名字-User，属性 avatar name
+      function User(props) {
+        return (
+          <div className="UserInfo">
+            <Avatar avatar={props.avatar} />
+            <div>{props.name}</div>
+          </div>
+        );
+      }
+      var user = {
+        author: {
+          name: "less",
+          avatar:
+            "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2035944494,3453366933&fm=26&gp=0.jp"
+        },
+        content: "content aaaaaa",
+        date: "2020-09-17"
+      };
+      // 组件属性 传值很多时候 ： 通过 ...方式传入
+      var vDOM = <Comment {...user} />;
+      ReactDOM.render(vDOM, document.getElementById("app"));
+    </script>
+  </body>
+</html>

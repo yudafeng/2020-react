@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="app2"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+    <!-- 虚拟dom -->
+    <script type="text/babel">
+      // className 不能写成class
+      // 创建元素：jsx - element - vdom
+      // babel : jsx - js
+      // const vDOM1 = (
+      //   <h1 className="title" style={{ color: "red" }}>
+      //     hello world
+      //   </h1>
+      // );
+      // debugger;
+      // React.createElement("h1", {
+      //   className: "title",
+      //   style: {
+      //     color: "red"
+      //   }
+      // }
+
+      // React.createElement 作用： js对象
+      // {
+      //   type:'h1',
+      //   props:{
+      //     className:'title',
+      //     style:{
+      //       color:'red'
+      //     },
+      //     children:'hello world'
+      //   }
+      // }
+      // vdom - dom
+      // ReactDOM.render(vDOM1, document.getElementById("app"));
+    </script>
+
+    <script type="text/javascript">
+      const vDOM2 = React.createElement(
+        "h1",
+        {
+          className: "title",
+          style: {
+            color: "red"
+          }
+        },
+        "hello world"
+      );
+
+      // 虚拟dom  轻 ，真实dom 很重
+      const trueDOM = document.getElementById("app");
+      debugger;
+      ReactDOM.render(vDOM2, document.getElementById("app"));
+    </script>
+  </body>
+</html>

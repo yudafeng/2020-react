@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <!-- 组件 条件渲染 -->
+    <script type="text/babel">
+      // 01 if
+      // function Welcome() {
+      //   return <h1>welcome back</h1>;
+      // }
+
+      // function Login() {
+      //   return <h1>Please Login First</h1>;
+      // }
+
+      // jsx : js + xml
+      // js + if + jsx
+      // function Greeting(props) {
+      //   const isLogin = props.isLogin;
+      //   if (isLogin) {
+      //     return <Welcome />;
+      //   } else {
+      //     return <Login />;
+      //   }
+      // }
+
+      // ReactDOM.render(
+      //   <Greeting isLogin={true} />,
+      //   document.getElementById("app")
+      // );
+
+      // 元素变量 + if
+      function Welcome() {
+        return <h1>welcome back</h1>;
+      }
+
+      function Login() {
+        return <h1>Please Login First</h1>;
+      }
+
+      // jsx : js + xml
+      // js + if + jsx
+      function Greeting(props) {
+        const isLogin = props.isLogin;
+        if (isLogin) {
+          return <Welcome />;
+        } else {
+          return <Login />;
+        }
+      }
+
+      // ajax - api - mongodb :  this.state.isLogin = isLogin
+      // class LoginControl extends React.Component {
+      //   constructor(props) {
+      //     super(props);
+      //     this.state = {
+      //       isLogin: false
+      //     };
+      //   }
+
+      //   login = () => {
+      //     console.log("ajax - api - mongodb");
+      //     this.setState({
+      //       isLogin: true
+      //     });
+      //   };
+
+      //   logout = () => {
+      //     console.log("logout 操作");
+      //     this.setState({
+      //       isLogin: false
+      //     });
+      //   };
+
+      //   render() {
+      //     const isLogin = this.state.isLogin;
+      //     let button;
+      //     if (isLogin) {
+      //       button = <button onClick={this.logout}>logout</button>;
+      //     } else {
+      //       button = <button onClick={this.login}>login</button>;
+      //     }
+
+      //     return (
+      //       <div>
+      //         <Greeting isLogin={this.state.isLogin} />
+      //         {button}
+      //       </div>
+      //     );
+      //   }
+      // }
+
+      // ReactDOM.render(<LoginControl />, document.getElementById("app"));
+
+      // 03 &&  [{},{}]
+      // js ： true&&expresstion  返回表达式
+      // js :  fasle&expresstion 返回false
+      // function MailBox(props) {
+      //   const unreading = props.unreadMail;
+
+      //   return (
+      //     <div>
+      //       <h1>Mail Box List</h1>
+      //       {unreading.length > 0 && (
+      //         <h2> you have {unreading.length} unread mail</h2>
+      //       )}
+      //     </div>
+      //   );
+      // }
+
+      // const undreads = [{}, {}, {}, {}];
+      // ReactDOM.render(
+      //   <MailBox unreadMail={undreads} />,
+      //   document.getElementById("app")
+      // );
+
+      // 三目运算 ： {} 表达式中不能使用if else，可以使用 三目运算
+      class LoginControl extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            isLogin: false
+          };
+        }
+
+        login = () => {
+          console.log("ajax - api - mongodb");
+          this.setState({
+            isLogin: true
+          });
+        };
+
+        logout = () => {
+          console.log("logout 操作");
+          this.setState({
+            isLogin: false
+          });
+        };
+
+        render() {
+          const isLogin = this.state.isLogin;
+          // let button;
+          // if (isLogin) {
+          //   button = <button onClick={this.logout}>logout</button>;
+          // } else {
+          //   button = <button onClick={this.login}>login</button>;
+          // }
+
+          return (
+            <div>
+              <Greeting isLogin={this.state.isLogin} />
+              {isLogin ? (
+                <button onClick={this.logout}>logout</button>
+              ) : (
+                <button onClick={this.login}>login</button>
+              )}
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<LoginControl />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <script type="text/babel">
+      // 注意：Objects are not valid as a React child
+      // class Student extends React.Component {
+      //   render() {
+      //     console.log(this);
+      //     console.log(this.props.children);
+      //     return (
+      //       <div>
+      //         <h1>hello world</h1>
+      //         {this.props.children}
+      //       </div>
+      //     );
+      //   }
+      // }
+      // const app = <Student name="less" />; // undefined
+      // const app = <Student name="less">aaaa</Student>; // aaaa
+
+      // ES6  map方法
+      // class Student extends React.Component {
+      //   render() {
+      //     console.log(this);
+      //     console.log(this.props.children);
+      //     return (
+      //       <div>
+      //         <h1>hello world</h1>
+      //         <ul>
+      //           {this.props.children.map(item => {
+      //             return <li>{item}</li>;
+      //           })}
+      //         </ul>
+      //       </div>
+      //     );
+      //   }
+      // }
+
+      // 官方推荐
+      class Student extends React.Component {
+        render() {
+          console.log(this);
+          console.log(this.props.children);
+          return (
+            <div>
+              <h1>hello world</h1>
+              <ul>
+                {React.Children.map(this.props.children, child => {
+                  return <li>{child}</li>;
+                })}
+              </ul>
+            </div>
+          );
+        }
+      }
+
+      // const app = (
+      //   <Student name="less">
+      //     <span>aaa</span>
+      //     <span>bbb</span>
+      //     <span>ccc</span>
+      //   </Student>
+      // );
+
+      // const app = <Student name="less" />; // undefined
+      const app = <Student name="less">aaaa</Student>; // aaaa
+      ReactDOM.render(app, document.getElementById("app"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <!-- setState 异步获取 返回值 -->
+    <script type="text/babel">
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            name: "small",
+            age: 0
+          };
+          this.state1 = {
+            name: "small",
+            age: 0
+          };
+        }
+
+        // {name: "small", age: 0}+{name: "big"} = >{name: "big", age: 0}
+        handleClick = () => {
+          this.setState({
+            name: "big"
+          });
+        };
+
+        handleClick2 = () => {
+          this.setState2({
+            name: "big"
+          });
+        };
+
+        // 封装setState
+        // Object.assign(target,...source)
+        setState2(newState) {
+          let target = {};
+          let initState = this.state1;
+          let obj = Object.assign(target, initState, newState);
+          console.log(obj);
+          this.state1 = obj;
+          // this.render(); //组件数据state1 已经更新，但是真实DOM 没有更新
+
+          ReactDOM.render(<App />, document.getElementById("app"));
+        }
+
+        render() {
+          console.log(this);
+          console.log("render");
+
+          return (
+            <div>
+              <h2>name:{this.state.name}</h2>
+              <h2>age:{this.state.age}</h2>
+              <h2>name1:{this.state1.name}</h2>
+              <h2>age1:{this.state1.age}</h2>
+              <button onClick={this.handleClick}>change</button>
+              <button onClick={this.handleClick2}>change2</button>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

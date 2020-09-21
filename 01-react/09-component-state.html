@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <script type="text/babel">
+      // function tick() {
+      //   const element = (
+      //     <div>
+      //       <h1>time</h1>
+      //       <h2>it is {new Date().toLocaleTimeString()}</h2>
+      //     </div>
+      //   );
+
+      //   ReactDOM.render(element, document.getElementById("app"));
+      // }
+      // setInterval(tick, 1000);
+
+      // 01 函数组件 ： 有没状态
+      // function Clock(props) {
+      //   return (
+      //     <div>
+      //       <h1>time</h1>
+      //       <h2>it is {props.date.toLocaleTimeString()}</h2>
+      //     </div>
+      //   );
+      // }
+      // function tick() {
+      //   ReactDOM.render(
+      //     <Clock date={new Date()} />,
+      //     document.getElementById("app")
+      //   );
+      // }
+      // 需要：我们手动每隔一秒 调用
+      // setInterval(tick, 1000);
+
+      // 02 函数组件转换类组件
+      // class Clock extends React.Component {
+      //   // 生命周期函数：只要有更新发生 就会调用渲染方法
+      //   render() {
+      //     console.log("render");
+      //     return (
+      //       <div>
+      //         <h1>time</h1>
+      //         <h2>it is {this.props.date.toLocaleTimeString()}</h2>
+      //       </div>
+      //     );
+      //   }
+      // }
+      // 只会复用一个组件实例
+      // function tick() {
+      //   ReactDOM.render(
+      //     <Clock date={new Date()} />,
+      //     document.getElementById("app")
+      //   );
+      // }
+      // 需要：我们手动每隔一秒 调用
+      // setInterval(tick, 1000);
+
+      // 需求：自动 Clock组件？
+
+      // 03 state 类组件 有额外功能：组件属性state 和 生命周期函数
+      // state 是组件私有
+      // 1) constructor(props) 写 了 一定调用super
+      // 2) state 直接修改地方 只能在初始化的时候,其他地方只能调用setState 来修改
+      class Clock extends React.Component {
+        constructor(props) {
+          // this hasn't been initialised - super() hasn't been called
+          super(props);
+          console.log("constructor");
+          // 这是唯一可以给 state 直接修改地方
+          this.state = { date: new Date() };
+        }
+
+        // 也可以直接赋值
+        // state = { date: new Date() };
+
+        // 生命周期函数：只要有更新发生 就会调用渲染方法
+        render() {
+          console.log("render");
+          // console.log(this);
+          return (
+            <div>
+              <h1>time</h1>state
+              <h2>it is {this.state.date.toLocaleTimeString()}</h2>
+            </div>
+          );
+        }
+
+        // 修改state
+        tick() {
+          this.setState({
+            date: new Date()
+          });
+        }
+
+        // 已挂载 已经渲染完成dom 然后调动改函数
+        componentDidMount() {
+          console.log("componentDidMount");
+          this.timerId = setInterval(() => {
+            this.tick();
+          }, 1000);
+        }
+
+        // 卸载 同时 注意资源释放
+        componentWillUnmount() {
+          clearInterval(this.timerId);
+        }
+      }
+      ReactDOM.render(<Clock />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

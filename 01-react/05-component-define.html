@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+    <!-- 组件 -->
+    <script type="text/babel">
+      // jsx - element-component - composing(components) + component - application
+      // 01 定义组件：函数组件(简单组件 ： 没有自己的状态)
+      // jsx : javascript + xml(html + 自定义)
+      // 注意：首字母大写
+      // props - jsx 属性（自动转化对象 {name:"aaa"}）：
+      // function Welcome(props) {
+      //   return <h1>hello World {props.name}</h1>;
+      // }
+
+      // 02 定义组件：Class 组件（复杂组件 ：有自己的状态 和生命周期 ）
+      // class Welcome extends React.Component {
+      //   render() {
+      //     // console.log(this);
+      //     return <h1>hello {this.props.name}</h1>;
+      //   }
+      // }
+      // 03 使用组件和渲染
+      const vDOM = <Welcome name="yudafeng" />;
+
+      // 04 组件组合: 做过组件封装吗？
+      function Welcome(props) {
+        return <h1>hello World {props.name}</h1>;
+      }
+
+      function App() {
+        return (
+          <div>
+            <Welcome name="Less" />
+            <Welcome name="Jack" />
+            <Welcome name="Jams" />
+          </div>
+        );
+      }
+
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

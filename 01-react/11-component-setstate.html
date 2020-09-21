@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <script type="text/babel">
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            count: 0
+          };
+        }
+
+        handleClick = () => {
+          //01 能直接修改 this.state 属性数据, 但是不会触发render(),所有需要调用setState()
+          // console.log(this);
+          // console.log(this.state.count);
+          // this.state.count = 1; //不要受动修改
+          // console.log(this);
+          // this.setState({ count: 1 }); // 直接调用react 提供的方法，内部已经做好封装 可以触发render()
+          // 02 :setState({}) 参数都是对象
+          //  结果
+          // 1---0
+          // 2---0
+          // 3---0
+          // render
+          // 分析：
+          // setState() 状态更新是异步的；
+          // setState 合并 ，提高性能
+          // this.setState({ count: this.state.count + 1 });
+          // console.log("1---" + this.state.count);
+          // this.setState({ count: this.state.count + 1 });
+          // console.log("2---" + this.state.count);
+          // this.setState({ count: this.state.count + 1 });
+          // console.log("3---" + this.state.count);
+          // update {
+          //   { count: this.state.count + 1 },
+          //   { count: this.state.count + 1 },
+          //   { count: this.state.count + 1 }
+          // }
+          // update{
+          //   { count: this.state.count + 1 }
+          // }
+          // 03 this.state 可能是异步更新，不应该依靠当前值计算下一个状态的值
+          // this.state.count 不稳定
+          this.setState({ count: this.state.count + 1 });
+          console.log("1---" + this.state.count);
+          this.setState({ count: this.state.count + 2 });
+          console.log("2---" + this.state.count);
+          this.setState({ count: this.state.count + 3 });
+          console.log("3---" + this.state.count);
+          // this.setState({ count: 1 });
+          // this.setState({ count: 2 });
+          // this.setState({ count: 3 });
+          // update{
+          //   { count: 1 },
+          //   { count: 2 },
+          //   { count: 3 }
+          // }
+          // update {
+          //   { count: 3 }
+          // }
+
+          // 04
+          // this.setState((preState, props) => ({
+          //   count: preState.count + 1
+          // }));
+          // console.log("1---" + this.state.count);
+          // this.setState((preState, props) => ({
+          //   count: preState.count + 1
+          // }));
+          // console.log("2---" + this.state.count);
+          // this.setState((preState, props) => ({
+          //   count: preState.count + 1
+          // }));
+          // console.log("3---" + this.state.count);
+
+          // 函数队列一样 ，不会合并
+          // update [(preState, props) => ({
+          //     count: preState.count + 1
+          //   }),(preState, props) => ({
+          //     count: preState.count + 1
+          //   }),(preState, props) => ({
+          //     count: preState.count + 1
+          //   })
+          // ]
+        };
+
+        // setState 异步合并  发生在render 之前的某个时候
+        render() {
+          console.log("render");
+          return (
+            <div>
+              <h2>count:{this.state.count}</h2>
+              <button onClick={this.handleClick}>changeCount</button>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

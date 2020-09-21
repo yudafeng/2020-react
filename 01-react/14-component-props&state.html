@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <!-- setState 异步获取 返回值 -->
+    <script type="text/babel">
+      // props state
+      // -- props 是组件对外的接口
+      // 组件树
+      // 单向数据流 上层组件 给 下层组件传递数据 是通过props传递的。
+
+      // -- state 是组件对内的接口 私有状态
+      // 组件  状态 = 维护自身的管理数据
+
+      // UI 变化， 基于props 和 state进行计算之后的变化 ： 声明式
+      // 类组件：数据集合（props 和 state）
+
+      // 瀑布流：单向数据流 + props + state
+
+      // 封装之后的组件 在使用的时候独立；
+      class Clock extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { date: new Date(), count: 0 };
+        }
+
+        // 修改state
+        tick() {
+          console.log("tick");
+          this.setState({
+            date: new Date(),
+            count: this.props.count
+          });
+        }
+
+        // es7 属性初始化 ,注意 兼容性
+        go = () => {
+          // console.log(this); //没绑定：undefined
+          console.log(this); //绑定：Clock 组件
+          this.timerId = setInterval(() => {
+            this.tick();
+          }, 1000);
+        };
+
+        render() {
+          return (
+            <div>
+              <h1>count:{this.state.count}</h1>
+              <h2>it is {this.state.date.toLocaleTimeString()}</h2>
+              <button onClick={this.go}>gogo</button>
+              <button onClick={this.removeComponent}>removeComponent</button>
+            </div>
+          );
+        }
+
+        // 已挂载 已经渲染完成dom 然后调动改函数
+        // componentDidMount() {
+        //   console.log("componentDidMount");
+        //   this.timerId = setInterval(() => {
+        //     this.tick();
+        //   }, 1000);
+        // }
+
+        // 卸载 同时 注意资源释放
+        componentWillUnmount() {
+          clearInterval(this.timerId);
+        }
+      }
+
+      // 无状态组件（state）--UI组件 : react 推荐
+      // 1 性能好
+      // 2 不能访问this.props
+      // 3 没有生命周期
+      // 4 纯函数 特点 immutabel
+      function App(props) {
+        return (
+          <div>
+            <Clock count={1} />
+            <Clock count={2} />
+            <Clock count={3} />
+          </div>
+        );
+      }
+
+      //
+
+      ReactDOM.render(<App />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+    <script src="./js/prop-types.js"></script>
+    <!-- 组件：抽离 -->
+    <script type="text/babel">
+      class Student extends React.Component {
+        // 方式二
+        static propTypes = {
+          name: PropTypes.string.isRequired,
+          age: PropTypes.number.isRequired
+        };
+
+        static defaultProps = {
+          sex: "secrect"
+        };
+
+        render() {
+          return (
+            <ul>
+              <li>name:{this.props.name}</li>
+              <li>age:{this.props.age}</li>
+              <li>sex:{this.props.sex}</li>
+            </ul>
+          );
+        }
+      }
+
+      // 方式一
+      // Student.propTypes = {
+      //   name: PropTypes.string.isRequired,
+      //   age: PropTypes.number.isRequired
+      // };
+
+      // Student.defaultProps = {
+      //   sex: "secrect"
+      // };
+
+      var user = {
+        name: "less"
+        age: 18
+      };
+
+      ReactDOM.render(
+        <Student name={user.name} age={user.age} />,
+        document.getElementById("app")
+      );
+    </script>
+  </body>
+</html>

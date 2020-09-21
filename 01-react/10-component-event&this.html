@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <script type="text/babel">
+      // event 和 this
+      class Clock extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { date: new Date() };
+
+          // 03 构造函数绑定 性能好
+          // this.go = this.go.bind(this);
+          this.removeComponent = this.removeComponent.bind(this);
+        }
+
+        // 修改state
+        tick() {
+          console.log("tick");
+          this.setState({
+            date: new Date()
+          });
+        }
+
+        // 开始
+        // go() {
+        //   // console.log(this); //没绑定：undefined
+        //   console.log(this); //绑定：Clock 组件
+        //   this.timerId = setInterval(() => {
+        //     this.tick();
+        //   }, 1000);
+        // }
+
+        // es7 属性初始化 ,注意 兼容性
+        go = () => {
+          // console.log(this); //没绑定：undefined
+          console.log(this); //绑定：Clock 组件
+          this.timerId = setInterval(() => {
+            this.tick();
+          }, 1000);
+        };
+
+        // this.go 就可以直接调用,因为内部会调用 go()
+        //01 this.go.bind(this) render 内绑定 每次渲染都需要绑定this 执行 ，新生成一个函数
+
+        // 02 ()=>{this.go()} 箭头函数 this 指向当前组件
+        // render中 渲染 都需要创建一个新的处理函数
+        // 组件开销大 层级越低 开销越大 a (b(d e), c (f e))
+        render() {
+          return (
+            <div>
+              <h1>time</h1>
+              <h2>it is {this.state.date.toLocaleTimeString()}</h2>
+              <button onClick={this.go}>gogo</button>
+              <button onClick={this.removeComponent}>removeComponent</button>
+            </div>
+          );
+        }
+
+        // 已挂载 已经渲染完成dom 然后调动改函数
+        componentDidMount() {
+          console.log("componentDidMount");
+          this.timerId = setInterval(() => {
+            this.tick();
+          }, 1000);
+        }
+
+        // 卸载 同时 注意资源释放
+        componentWillUnmount() {
+          clearInterval(this.timerId);
+        }
+
+        // 移除组件
+        removeComponent() {
+          ReactDOM.unmountComponentAtNode(document.getElementById("app"));
+        }
+      }
+      ReactDOM.render(<Clock />, document.getElementById("app"));
+    </script>
+  </body>
+</html>
