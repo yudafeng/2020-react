@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <!-- refs
+      Refs:DOM nodes
+
+      ref 值 根据不同节点类型 而不同
+      html 标签：this.textInput.current = input DOM
+      class 组件 this.textInput.current = 组件实例
+      函数组件 不能使用ref属性 ，因为没有实例
+
+    -->
+
+    <script type="text/babel">
+      // class App extends React.Component {
+      //   constructor(props) {
+      //     super(props);
+      //     // 01 创建引用对象  16.3 API
+      //     // this.textInput = React.createRef();
+      //     // console.log(React.createRef()); //{current: null}
+      //   }
+
+      //   // 03 访问refs
+
+      //   handlClick = () => {
+      //     // 方式1
+      //     // console.log(this.textInput.current);
+      //     // alert(this.textInput.current.value);
+      //     // 方式2
+      //     // console.log(this.textInput);
+      //     // alert(this.textInput.value);
+      //   };
+
+      //   // 所有的事件回调 函数，都有参数event
+      //   handleBlur = event => {
+      //     // 方式3
+      //     console.log(event.target);
+      //     alert(event.target.value);
+      //   };
+
+      //   render() {
+      //     return (
+      //       <div>
+      //         {/*
+      //            02 input元素  被关联(React 做的)到this.textInput
+      //            this.textInput.current = input DOM
+      //          */}
+      //         <input type="text" ref={this.textInput} />
+      //         {/*
+      //          方式2：回调函数方式 早期版本
+      //          */}
+      //         <input
+      //           type="text"
+      //           ref={input => {
+      //             this.textInput = input;
+      //           }}
+      //         />
+
+      //         <input
+      //           type="text"
+      //           onBlur={this.handleBlur}
+      //           placeholder="失去焦点提示信息"
+      //         />
+
+      //         <button onClick={this.handlClick}>alertInputMsg</button>
+      //       </div>
+      //     );
+      //   }
+      // }
+      // ReactDOM.render(<App />, document.getElementById("app"));
+
+      // ref + 类组件
+      // class 组件 this.textInput.current = 组件实例
+      // class AutoFocusTextInput extends React.Component {
+      //   constructor(props) {
+      //     super(props);
+      //     this.textInput = React.createRef();
+      //     // console.log(React.createRef()); //{current: null}
+      //   }
+
+      //   render() {
+      //     return <CostomTextInput ref={this.textInput} />;
+      //   }
+
+      //   componentDidMount() {
+      //     console.log("componentDidMount", this.textInput.current);
+      //   }
+      // }
+
+      // class CostomTextInput extends React.Component {
+      //   constructor(props) {
+      //     super(props);
+      //     this.textInput = React.createRef();
+      //   }
+
+      //   handleBlur = event => {
+      //     console.log(this.textInput.current);
+      //     alert(this.textInput.current.value);
+      //   };
+
+      //   render() {
+      //     return (
+      //       <div>
+      //         <input
+      //           type="text"
+      //           onBlur={this.handleBlur}
+      //           ref={this.textInput}
+      //         />
+      //       </div>
+      //     );
+      //   }
+      // }
+
+      //手动获取焦点
+      // class CostomTextInput extends React.Component {
+      //   constructor(props) {
+      //     super(props);
+      //     // 引用对象、 容器
+      //     this.textInput = React.createRef(); //{current:null}
+      //   }
+
+      //   focusTextInput = () => {
+      //     this.textInput.current.focus();
+      //   };
+
+      //   render() {
+      //     return (
+      //       <div>
+      //         <input type="text" ref={this.textInput} />
+      //         <input
+      //           type="button"
+      //           value="Focus Input"
+      //           onClick={this.focusTextInput}
+      //         />
+      //       </div>
+      //     );
+      //   }
+      // }
+
+      // 父组件里面 ： refs + 组件
+      // 需求：自动获取焦点
+      // class AutoFocusTextInput extends React.Component {
+      //   constructor(props) {
+      //     super(props);
+      //     this.textInput = React.createRef();
+      //   }
+
+      //   render() {
+      //     return <CostomTextInput ref={this.textInput} />;
+      //   }
+
+      //   componentDidMount() {
+      //     console.log("componentDidMount", this.textInput.current);
+      //     // this.textInput.current.focusTextInput();
+      //   }
+      // }
+
+      // 单向数据流
+      // 子组件 - 调用父组件方法：父组件 - 属性 传递函数 - 子组件 -子组件调用 传递进来的函数
+      // 父组件 - 调用子组件方法： 父组件中的子组件(ref) - 子组件的实例 - 父组件就可以调用子组件的实例方法
+
+      // ref 和函数组件
+      // 父组件在使用 函数组件(外部) 不能使用ref属性 ，因为没有实例
+      // function CostomTextInput() {
+      //   return (
+      //     <div>
+      //       <input type="text" />
+      //       <input type="button" value="Focus Input" />
+      //     </div>
+      //   );
+      // }
+
+      // 在函数组件 内部 可以使用ref属性 借助：hooks
+      // function CostomTextInput() {
+      //   // 创建ref对象 容器
+      //   const textInput = React.useRef(null);
+      //   console.log(textInput);
+
+      //   function focusTextInput() {
+      //     textInput.current.focus();
+      //   }
+
+      //   return (
+      //     <div>
+      //       <input type="text" ref={textInput} />
+      //       <input type="button" value="Focus Input" onClick={focusTextInput} />
+      //     </div>
+      //   );
+      // }
+
+      // refs + 回调函数
+      // class AutoFocusTextInput extends React.Component {
+      //   constructor(props) {
+      //     super(props);
+      //     // this.textInput = React.createRef(); //{current:null}
+      //     this.textInput = null;
+      //   }
+
+      //   // 定义回调函数
+      //   // element 组件实例 或 input dom
+      //   setTextInputRef = element => {
+      //     this.textInput = element;
+      //   };
+
+      //   render() {
+      //     return <CostomTextInput ref={this.setTextInputRef} />;
+      //   }
+
+      //   componentDidMount() {
+      //     console.log("componentDidMount", this.textInput);
+      //     this.textInput.focusTextInput();
+      //   }
+      // }
+
+      // class CostomTextInput extends React.Component {
+      //   constructor(props) {
+      //     super(props);
+      //     // 引用对象、 容器
+      //     this.textInput = React.createRef(); //{current:null}
+      //   }
+
+      //   focusTextInput = () => {
+      //     this.textInput.current.focus();
+      //   };
+
+      //   render() {
+      //     return (
+      //       <div>
+      //         <input type="text" ref={this.textInput} />
+      //         <input
+      //           type="button"
+      //           value="Focus Input"
+      //           onClick={this.focusTextInput}
+      //         />
+      //       </div>
+      //     );
+      //   }
+      // }
+
+      // 父组件获取子组件 某个dom
+      function CostomTextInput(props) {
+        return (
+          <div>
+            <input type="text" ref={props.inputRef} />
+          </div>
+        );
+      }
+
+      // 普通属性传值
+      class Parent extends React.Component {
+        // this.inputElement
+        render() {
+          return <CostomTextInput inputRef={el => (this.inputElement = el)} />;
+        }
+
+        componentDidMount() {
+          console.log("componentDidMount", this.inputElement);
+          this.inputElement.focus();
+        }
+      }
+
+      ReactDOM.render(<Parent />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

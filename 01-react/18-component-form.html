@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <script type="text/babel">
+      // 01 非受控组件
+      // dom节点处理；不需要状态State ;（ref）
+      // class App extends React.Component {
+      //   constructor(props) {
+      //     super(props);
+
+      //     this.usernameInput = React.createRef();
+      //     // console.log(React.createRef()); //{current: null}
+      //   }
+      //   submit = event => {
+      //     // 收集form数据
+      //     console.log(this.usernameInput.current.value);
+      //     console.log({ username: this.usernameInput.current.value });
+      //     // 网络请求
+
+      //     event.preventDefault(); //取消默认事件
+      //   };
+
+      //   render() {
+      //     return (
+      //       <div>
+      //         <form onSubmit={this.submit}>
+      //           <input type="text" name="username" ref={this.usernameInput} />
+      //           <input type="submit" />
+      //         </form>
+      //       </div>
+      //     );
+      //   }
+      // }
+
+      // 02  受控组件
+      // 需要维护自己状态state；
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { username: "" };
+        }
+
+        submit = event => {
+          // 收集form数据
+          console.log(this.state.username);
+          this.setState({
+            username: ""
+          });
+          // 网络请求
+          event.preventDefault(); //取消默认事件
+        };
+
+        handleChange = e => {
+          // const name = e.target.value
+          // console.log(e.target.value);
+          this.setState({
+            username: e.target.value
+          });
+        };
+
+        // vue 双向数据绑定
+        // 数据 ->页面  属性绑定  value属性 -- this.state.username
+        // 页面->数据   事件绑定  onchange -- setState
+
+        render() {
+          return (
+            <div>
+              <form onSubmit={this.submit}>
+                <input
+                  type="text"
+                  name="username"
+                  value={this.state.username}
+                  onChange={this.handleChange}
+                />
+                <input type="submit" />
+              </form>
+            </div>
+          );
+        }
+      }
+
+      // 组件 分类：  函数组件 or 类组件
+      // form :受控组件 和 非受控组件
+
+      // 受控组件：处理多种输入请求
+      class UserForm extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {};
+        }
+
+        handleChange = e => {
+          var target = e.target;
+          // console.log(target.name);
+          // console.log(target.type);
+          // console.log(target.value);
+
+          // var value = target.value;
+          // console.log(value);
+          // checkout:真实true 和 false
+          // var value = target.checked;
+          // console.log(value);
+          var value =
+            target.type === "checkbox" ? target.checked : target.value;
+          console.log(value);
+
+          var key = target.name;
+          console.log("key:", key);
+          console.log("value:", value);
+
+          // this.setState({key:value}) 自动合并
+          // this.setState({ key: value }); //不好使
+          // this.setState({ username: value }); //好使
+
+          this.setState({ [key]: value });
+
+          // var obj = {};
+          // obj[name] = value; // {'username':'less'}
+          // this.setState(obj);
+        };
+
+        handSubmit = event => {
+          console.log(this.state);
+
+          event.preventDefault();
+        };
+        render() {
+          return (
+            <form onSubmit={this.handSubmit}>
+              username:
+              <input
+                type="text"
+                name="username"
+                onChange={this.handleChange}
+                value={this.state.username}
+              />
+              <br />
+              age:
+              <input
+                type="number"
+                name="age"
+                onChange={this.handleChange}
+                value={this.state.age}
+              />
+              <br />
+              single:
+              <input
+                type="checkbox"
+                name="single"
+                onChange={this.handleChange}
+                value={this.state.single}
+              />
+              <br />
+              desc:
+              <textarea
+                type="checkbox"
+                name="desc"
+                onChange={this.handleChange}
+                value={this.state.desc}
+              />
+              <br />
+              hobby:
+              <select
+                name="hobby"
+                onChange={this.handleChange}
+                value={this.state.hobby}
+              >
+                <option value="eat">eat</option>
+                <option value="play">play</option>
+                <option value="sleep">sleep</option>
+              </select>
+              <br />
+              <input type="submit" type="submit" />
+            </form>
+          );
+        }
+      }
+
+      ReactDOM.render(<UserForm />, document.getElementById("app"));
+    </script>
+  </body>
+</html>
