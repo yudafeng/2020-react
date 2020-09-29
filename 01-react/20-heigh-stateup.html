@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <script type="text/babel">
+      // 01 水温是否沸腾的组件
+      // props: c 摄氏温度
+      function Boil(props) {
+        if (props.c >= 100) {
+          return <p>the water is boil</p>;
+        } else {
+          return <p>the water is not boil</p>;
+        }
+      }
+
+      // 计算水温的组件
+      // 01 顺序
+      // 组件拆分
+      // 静态组件页面
+      //   组件抽离
+      // 动态组件页面
+      //   组件状态提升
+      // 02 data - input : 属性绑定和事件绑定
+      // 03 this.state.temperatur 和 Boil组件关系 ：props 父子组件传值
+      // class Calculator extends React.Component {
+      //   constructor() {
+      //     super();
+      //     this.state = {
+      //       temperature: ""
+      //     };
+      //     this.handleChange = this.handleChange.bind(this);
+      //   }
+
+      //   handleChange(e) {
+      //     this.setState({
+      //       temperature: e.target.value
+      //     });
+      //   }
+
+      //   render() {
+      //     return (
+      //       <>
+      //         <fieldset>
+      //           <legend>请输入摄氏温度（c）:</legend>
+      //           <input
+      //             type="text"
+      //             value={this.state.temperature}
+      //             onChange={this.handleChange}
+      //           />
+      //         </fieldset>
+      //         <Boil c={parseFloat(this.state.temperature)} />
+      //       </>
+      //     );
+      //   }
+      // }
+
+      // TemperatureInput 组件抽离
+      // 能输入摄氏温度 和 华氏温度，标题动态显示 两者数据应该同步
+
+      // const typeName = {
+      //   c: "摄氏温度",
+      //   f: "华氏温度"
+      // };
+
+      // class TemperatureInput extends React.Component {
+      //   constructor() {
+      //     super();
+      //     this.state = {
+      //       temperature: ""
+      //     };
+      //     this.handleChange = this.handleChange.bind(this);
+      //   }
+
+      //   handleChange(e) {
+      //     this.setState({
+      //       temperature: e.target.value
+      //     });
+      //   }
+      //   // 标题问题： {type == "c" ? "摄氏温度" : "华氏温度"} 或 {typeName[type]}
+      //   render() {
+      //     const type = this.props.type;
+      //     return (
+      //       <fieldset>
+      //         <legend>请输入 {typeName[type]}:</legend>
+      //         <input
+      //           type="text"
+      //           value={this.state.temperature}
+      //           onChange={this.handleChange}
+      //         />
+      //       </fieldset>
+      //     );
+      //   }
+      // }
+
+      // class Calculator extends React.Component {
+      //   render() {
+      //     return (
+      //       <>
+      //         <TemperatureInput type="c" />
+      //         <TemperatureInput type="f" />
+      //         <Boil />
+      //       </>
+      //     );
+      //   }
+      // }
+
+      // 问题：
+      // 组件之间需要数据同步（c f ）
+      // 因为 Calculator 不知道 TemperatureInput 输入的温度，Calculator 不能告诉Boil 温度
+      // 导致TemperatureInput 和 Boil 脱离关系
+      // 解决
+      // 多个组件要共享state，转移 共同的父组件 实现数据共享 “状态提升”
+      // TemperatureInput 中state 提升到Calculator，Boil 组件依赖于Calculator 的state
+
+      const typeName = {
+        c: "摄氏温度",
+        f: "华氏温度"
+      };
+
+      // 子 父 传值
+      class TemperatureInput extends React.Component {
+        constructor() {
+          super();
+          this.handleChange = this.handleChange.bind(this);
+        }
+
+        // 子组件 调用父组件的方法 实现 传值
+        handleChange(e) {
+          this.props.onTemperatureChange(e.target.value);
+        }
+
+        // 标题问题： {type == "c" ? "摄氏温度" : "华氏温度"} 或 {typeName[type]}
+        render() {
+          const type = this.props.type;
+          const temperature = this.props.t;
+          return (
+            <fieldset>
+              <legend>请输入 {typeName[type]}:</legend>
+              <input
+                type="text"
+                value={temperature}
+                onChange={this.handleChange}
+              />
+            </fieldset>
+          );
+        }
+      }
+
+      // 父子组件 互相传值
+
+      class Calculator extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            temperature: ""
+          };
+          this.handTemperatureChange = this.handTemperatureChange.bind(this);
+        }
+
+        handTemperatureChange(t) {
+          this.setState({
+            temperature: t
+          });
+        }
+
+        render() {
+          const temperature = this.state.temperature;
+          const fTemperature = toF(temperature);
+
+          return (
+            <>
+              <TemperatureInput
+                type="c"
+                t={temperature}
+                onTemperatureChange={this.handTemperatureChange}
+              />
+              <TemperatureInput
+                type="f"
+                t={fTemperature}
+                onTemperatureChange={this.handTemperatureChange}
+              />
+              <Boil c={parseFloat(this.state.temperature)} />
+            </>
+          );
+        }
+      }
+
+      function toF(c) {
+        return (c * 9) / 5 + 32;
+      }
+
+      ReactDOM.render(<Calculator />, document.getElementById("app"));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script src="./js/react.development.js"></script>
+    <script src="./js/react-dom.development.js"></script>
+    <script src="./js/babel.min.js"></script>
+
+    <script type="text/babel">
+      // 需求：子元素列表的组件
+      class Table extends React.Component {
+        render() {
+          return (
+            <table>
+              <tbody>
+                <tr>
+                  <Columns2 />
+                </tr>
+              </tbody>
+            </table>
+          );
+        }
+      }
+
+      class Columns extends React.Component {
+        render() {
+          return (
+            <React.Fragment>
+              <td>a</td>
+              <td>b</td>
+              <td>c</td>
+            </React.Fragment>
+          );
+        }
+      }
+
+      // Fragment  子元素分组 不加入额外DOM
+      // 短语法：<> </> ,不支持key 或 属性
+      class Columns2 extends React.Component {
+        render() {
+          return (
+            <>
+              <td>a</td>
+              <td>b</td>
+              <td>c</td>
+            </>
+          );
+        }
+      }
+
+      const blogs = [
+        { id: 1, title: "a", content: "a-content" },
+        { id: 2, title: "b", content: "b-content" },
+        { id: 3, title: "c", content: "c-content" }
+      ];
+
+      function Blogs(props) {
+        return (
+          <dl>
+            {props.blogs.map(item => (
+              <React.Fragment key={item.id}>
+                <dt>{item.title}</dt>
+                <dd>{item.content}</dd>
+              </React.Fragment>
+            ))}
+          </dl>
+        );
+      }
+
+      ReactDOM.render(<Blogs blogs={blogs} />, document.getElementById("app"));
+    </script>
+  </body>
+</html>
